@@ -5,6 +5,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import axios from 'axios';
 
 const endPoint = 'https://api.github.com/users';
 
@@ -14,16 +15,27 @@ const App = ({style}) => {
 
   useEffect(() => {
     setIsLoading(true);
-    async function fetchData() {
-      let result = await fetch(endPoint);
-      if (result.status == 200) {
-        result = await result.json();
-        setData(result);
-      } else {
-        console.log(result.statusText);
-      }
-    }
-    fetchData();
+    // Axios simple get call
+    axios
+      .get(endPoint)
+      .then(function (response) {
+        setData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    // simple fetch function
+    // async function fetchData() {
+    //   let result = await fetch(endPoint);
+    //   if (result.status == 200) {
+    //     result = await result.json();
+    //     setData(result);
+    //   } else {
+    //     console.log(result.statusText);
+    //   }
+    // }
+    // fetchData();
     setIsLoading(false);
   }, []);
 
@@ -67,6 +79,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     marginTop: hp(3),
+    marginBottom: hp(3),
   },
 });
 
