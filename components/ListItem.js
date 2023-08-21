@@ -5,13 +5,17 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const ListItem = ({style, name, id, image_url}) => {
+const ListItem = ({style, first_name, last_name, id, avatar}) => {
   return (
     <View style={[styles.container, style]}>
-      <Image source={{uri: image_url}} style={styles.image} />
-      <View style={styles.detailsContainer}>
-        <Text style={styles.name}>{name}</Text>
-        <Text>ID: {id}</Text>
+      <View style={styles.card}>
+        <Image source={{uri: avatar}} style={styles.image} />
+        <View style={styles.detailsContainer}>
+          <Text style={styles.name}>
+            {first_name} {last_name}
+          </Text>
+          <Text>ID: {id}</Text>
+        </View>
       </View>
     </View>
   );
@@ -19,6 +23,9 @@ const ListItem = ({style, name, id, image_url}) => {
 
 const styles = StyleSheet.create({
   container: {
+    paddingBottom: hp(2.3),
+  },
+  card: {
     marginHorizontal: wp(5),
     marginVertical: hp(0.7),
     backgroundColor: 'white',

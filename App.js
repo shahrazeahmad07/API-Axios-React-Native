@@ -7,7 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import axios from 'axios';
 
-const endPoint = 'https://api.github.com/users';
+const endPoint = 'https://reqres.in/api/users?page=2';
 
 const App = ({style}) => {
   const [data, setData] = useState();
@@ -15,11 +15,12 @@ const App = ({style}) => {
 
   useEffect(() => {
     setIsLoading(true);
+    //! api get
     // Axios simple get call
     axios
       .get(endPoint)
       .then(function (response) {
-        setData(response.data);
+        setData(response.data.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -36,6 +37,49 @@ const App = ({style}) => {
     //   }
     // }
     // fetchData();
+    let newUser = {
+      name: 'foo',
+      job: 'bar',
+    };
+
+    //! api create => Post
+    axios
+      .post('https://reqres.in/api/users', newUser)
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        alert(error.message);
+      });
+
+    //! api Delete
+    function deleteUserWithId(id) {
+      axios
+        .delete(`https://reqres.in/api/users/${id}`)
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          alert(error.message);
+        });
+    }
+    deleteUserWithId(2);
+
+    //! api update => put
+    function updateUserWithId(id, updatedData) {
+      axios
+        .put(`https://reqres.in/api/users/${id}`, updatedData)
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          alert(error.message);
+        });
+    }
+    updateUserWithId(2, newUser);
+
     setIsLoading(false);
   }, []);
 
@@ -62,10 +106,10 @@ const App = ({style}) => {
           }}
           renderItem={({item}) => (
             <ListItem
-              style={styles.listItem}
-              name={item.login.toUpperCase()}
+              first_name={item.first_name}
+              last_name={item.last_name}
               id={item.id}
-              image_url={item.avatar_url}
+              avatar={item.avatar}
             />
           )}
         />
@@ -78,8 +122,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flatList: {
-    marginTop: hp(3),
-    marginBottom: hp(3),
+    paddingTop: hp(3),
+    paddingBottom: hp(3),
   },
 });
 
